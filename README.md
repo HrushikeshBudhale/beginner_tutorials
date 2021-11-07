@@ -35,7 +35,12 @@ source devel/setup.bash
  roslaunch first_publisher_subscriber beginner_tutorial.launch
  ```
 
- To launch the talker node with user defined frequency, enter following command by replacing ```<value>``` with a number
+ To launch the talker node with user defined frequency, enter following command by replacing ```<value>``` by a number
  ```
  roslaunch first_publisher_subscriber beginner_tutorial.launch pub_freq:=<value>
+ ```
+
+ To call ros service through command line enter following command by replacing ```<value>``` by a string
+ ```
+ rosservice call /modify_output "data: '<value>'"
  ```
