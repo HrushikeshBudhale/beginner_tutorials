@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
     ss << "My custom message." << count;
     msg.data = ss.str();
 
-    ROS_INFO("%s", msg.data.c_str());
+    ROS_INFO_STREAM("[Talker] " << msg.data);
 
     chatter_pub.publish(msg);
 
