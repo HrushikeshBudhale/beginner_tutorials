@@ -33,9 +33,16 @@ SOFTWARE.
 #include "std_msgs/String.h"
 #include "first_publisher_subscriber/modify_str.h"
 
+// Global variables
 int count = 1;
-ros::ServiceClient client;
+ros::ServiceClient client;  // Ros service client object
 
+/**
+ * @brief Callback function that subscribes to ros topic. and calls ros service
+ *         after receiving 10 messages.
+ * 
+ * @param msg variable containing messages data
+ */
 void chatterCallback(const std_msgs::String::ConstPtr& msg) {
   ROS_DEBUG_STREAM("[Listener] I heard: " << msg->data);
 
@@ -44,6 +51,7 @@ void chatterCallback(const std_msgs::String::ConstPtr& msg) {
     first_publisher_subscriber::modify_str srv;
     srv.request.data = "Modified log message from listener";
     if (client.call(srv))
+      // call returns true on successful execution of service
       ROS_INFO_STREAM("[Listener] Received response: "
                                                     << srv.response.new_data);
     else
@@ -55,9 +63,11 @@ int main(int argc, char **argv) {
   ros::init(argc, argv, "listener", ros::init_options::AnonymousName);
   ros::NodeHandle n;
 
+  // Create service client
   client = n.serviceClient
                     <first_publisher_subscriber::modify_str>("modify_output");
 
+  // Create subscriber callback
   ros::Subscriber sub = n.subscribe("chatter", 1000, chatterCallback);
 
   ros::spin();
