@@ -28,20 +28,37 @@ bool modify_output(first_publisher_subscriber::modify_str::Request &req,
 
 
 int main(int argc, char **argv) {
-  ros::init(argc, argv, "talker");
+  int freq = 1;
+  log_msg.data = "Default log message";
+
+  if (argc > 1) {
+    std::istringstream ss(argv[1]);
+    if (!(ss >> freq)) {
+      ROS_FATAL_STREAM("[Talker] Received invalid frequency" << argv[1]);
+      ROS_FATAL_STREAM("[Talker] Unable to start the talker node");
+      return 0;
+    } else {
+        ROS_WARN_STREAM("[Talker] Starting talker with publish freq: " << freq
+                                                                    << " Hz");
+    }
+  } else {
+    ROS_INFO_STREAM("[Talker] Starting talker node with default freq: " << freq
+                                                                    << " Hz");
+  }
+  ros::init(argc, argv, "talker", ros::init_options::AnonymousName);
   ros::NodeHandle n;
   ros::Publisher chatter_pub = n.advertise<std_msgs::String>("chatter", 1000);
   ros::ServiceServer service = n.advertiseService("modify_output",
                                                     modify_output);
 
-  ros::Rate loop_rate(10);
+  ros::Rate loop_rate(freq);
 
   int count = 0;
   while (ros::ok()) {
     std_msgs::String msg;
     std::stringstream ss;
 
-    ss << "My custom message." << count;
+    ss << log_msg.data << " " << count;
     msg.data = ss.str();
 
     ROS_INFO_STREAM("[Talker] " << msg.data);
