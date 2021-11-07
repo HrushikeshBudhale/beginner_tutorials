@@ -34,12 +34,20 @@ SOFTWARE.
 #include "std_msgs/String.h"
 #include "first_publisher_subscriber/modify_str.h"
 
-std_msgs::String log_msg;
+std_msgs::String log_msg;   // global variable to set message string
 
+/**
+ * @brief Service call back to set new message string
+ * 
+ * @param req Request containing string of new message
+ * @param res Response with boolean status and update message
+ * @return true 
+ * @return false 
+ */
 bool modify_output(first_publisher_subscriber::modify_str::Request &req,
                    first_publisher_subscriber::modify_str::Response &res) {
   ROS_DEBUG_STREAM("[Talker] Received req: " << req.data);
-  log_msg.data = req.data;
+  log_msg.data = req.data;                    // Updates message string
   res.new_data = "Publish message updated";
   res.status = true;
   ROS_DEBUG_STREAM("[Talker] Responding with resp: " << res.new_data);
@@ -52,7 +60,7 @@ int main(int argc, char **argv) {
   log_msg.data = "Default log message";
 
   if (argc > 1) {
-    std::istringstream ss(argv[1]);
+    std::istringstream ss(argv[1]);  // Read argument passed by launch file
     if (!(ss >> freq)) {
       ROS_FATAL_STREAM("[Talker] Received invalid frequency" << argv[1]);
       ROS_FATAL_STREAM("[Talker] Unable to start the talker node");
@@ -61,13 +69,17 @@ int main(int argc, char **argv) {
         ROS_WARN_STREAM("[Talker] Starting talker with publish freq: " << freq
                                                                     << " Hz");
     }
-  } else {
+  } else {    // if no argument passed
     ROS_INFO_STREAM("[Talker] Starting talker node with default freq: " << freq
                                                                     << " Hz");
   }
   ros::init(argc, argv, "talker", ros::init_options::AnonymousName);
   ros::NodeHandle n;
+
+  // Advertise topic to publish on
   ros::Publisher chatter_pub = n.advertise<std_msgs::String>("chatter", 1000);
+
+  // Advertise new service
   ros::ServiceServer service = n.advertiseService("modify_output",
                                                     modify_output);
 
