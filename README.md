@@ -2,7 +2,7 @@
 ---
 
 ### Description
- Repository containing 'first_publisher_subscriber' package with one publisher and one subscriber.
+ Repository containing 'first_publisher_subscriber' package with one talker and one listener node. Talker node publishes message and provides service named 'modify_output'. Listener node subscribes to the messages from talker and calls 'modify_output' after fixed interval of time. Both the nodes can be launched using single launch file.
 
 
 ### Dependencies
@@ -12,6 +12,7 @@
     - catkin
     - roscpp
     - std_msgs
+    - message_generation
 
 ### Assumptions
  It is assumed that the user has installed ROS Melodic full desktop version. And has created a catkin_ws folder with src folder inside it.
@@ -27,15 +28,14 @@ source devel/setup.bash
 ```
 ### Steps to run
  
- Run ```roscore``` in separate terminal and then in your 'catkin_ws/' directory open 2 terminals.
- In first terminal type
+ In your 'catkin_ws/', enter following command to launch both talker and listener nodes.
+
  ```
  source devel/setup.bash
- rosrun first_publisher_subscriber talker
+ roslaunch first_publisher_subscriber beginner_tutorial.launch
  ```
 
- In second terminal type
+ To launch the talker node with user defined frequency, enter following command by replacing ```<value>``` with a number
  ```
- source devel/setup.bash
- rosrun first_publisher_subscriber listener
+ roslaunch first_publisher_subscriber beginner_tutorial.launch pub_freq:=<value>
  ```
