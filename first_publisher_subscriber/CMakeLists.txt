@@ -206,6 +206,17 @@ include_directories(
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
+if(CATKIN_ENABLE_TESTING)
+  find_package(rostest REQUIRED)
+  add_rostest_gtest(
+    the_rostest 
+    test/first_pub_sub_test.test 
+    test/test_talker.cpp)
+  target_link_libraries(
+    the_rostest ${catkin_LIBRARIES}
+  )
+endif()
+
 add_executable(talker src/talker.cpp)
 target_link_libraries(talker ${catkin_LIBRARIES})
 
