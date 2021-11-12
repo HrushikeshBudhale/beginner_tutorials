@@ -44,7 +44,7 @@ ros::ServiceClient client;  // Ros service client object
  * @param msg variable containing messages data
  */
 void chatterCallback(const std_msgs::String::ConstPtr& msg) {
-  ROS_DEBUG_STREAM("[Listener] I heard: " << msg->data);
+  ROS_INFO_STREAM("[Listener] I heard: " << msg->data);
 
   count++;
   if (count%10 == 0) {
