@@ -47,8 +47,10 @@ std_msgs::String log_msg;   // global variable to set message string
  * @return true 
  * @return false 
  */
-bool modify_output(first_publisher_subscriber::modify_str::Request &req,
-                   first_publisher_subscriber::modify_str::Response &res) {
+bool modify_output(first_publisher_subscriber::modify_str::Request
+                                  &req,    // NOLINT(runtime/references)
+                   first_publisher_subscriber::modify_str::Response
+                                  &res) {  // NOLINT(runtime/references)
   ROS_DEBUG_STREAM("[Talker] Received req: " << req.data);
   log_msg.data = req.data;                    // Updates message string
   res.new_data = "Publish message updated";
@@ -57,7 +59,11 @@ bool modify_output(first_publisher_subscriber::modify_str::Request &req,
   return true;
 }
 
-
+/**
+ * @brief Publishers static non-zero pose wrt world frame
+ * 
+ * @param frame_name name of the current child frame
+ */
 void publish_pose(std::string frame_name) {
   static tf2_ros::TransformBroadcaster br;
   geometry_msgs::TransformStamped transformStamped;
