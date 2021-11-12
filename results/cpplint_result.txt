@@ -1,5 +1,3 @@
 Done processing ./src/listener.cpp
-./src/talker.cpp:39:  Is this a non-const reference? If so, make const or use a pointer: first_publisher_subscriber::modify_str::Request &req  [runtime/references] [2]
-./src/talker.cpp:40:  Is this a non-const reference? If so, make const or use a pointer: first_publisher_subscriber::modify_str::Response &res  [runtime/references] [2]
 Done processing ./src/talker.cpp
-Total errors found: 2
+Done processing ./test/test_talker.cpp
