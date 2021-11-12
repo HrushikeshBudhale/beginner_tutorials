@@ -33,6 +33,9 @@ SOFTWARE.
 #include "ros/ros.h"
 #include "std_msgs/String.h"
 #include "first_publisher_subscriber/modify_str.h"
+#include "tf2/LinearMath/Quaternion.h"
+#include "tf2_ros/transform_broadcaster.h"
+#include "geometry_msgs/TransformStamped.h"
 
 std_msgs::String log_msg;   // global variable to set message string
 
@@ -52,6 +55,27 @@ bool modify_output(first_publisher_subscriber::modify_str::Request &req,
   res.status = true;
   ROS_DEBUG_STREAM("[Talker] Responding with resp: " << res.new_data);
   return true;
+}
+
+
+void publish_pose(std::string frame_name) {
+  static tf2_ros::TransformBroadcaster br;
+  geometry_msgs::TransformStamped transformStamped;
+
+  transformStamped.header.stamp = ros::Time::now();
+  transformStamped.header.frame_id = "/world";
+  transformStamped.child_frame_id = frame_name;
+  transformStamped.transform.translation.x = 1.0;
+  transformStamped.transform.translation.z = 2.0;
+  transformStamped.transform.translation.y = 3.0;
+  tf2::Quaternion q;
+  q.setRPY(0, 0, 3.142);
+  transformStamped.transform.rotation.x = q.x();
+  transformStamped.transform.rotation.y = q.y();
+  transformStamped.transform.rotation.z = q.z();
+  transformStamped.transform.rotation.w = q.w();
+
+  br.sendTransform(transformStamped);
 }
 
 
@@ -96,7 +120,7 @@ int main(int argc, char **argv) {
     ROS_INFO_STREAM("[Talker] " << msg.data);
 
     chatter_pub.publish(msg);
-
+    publish_pose("/talk");
     ros::spinOnce();
 
     loop_rate.sleep();
